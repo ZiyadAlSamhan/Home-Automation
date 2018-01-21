@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Home Automation</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <div class="container">
+      <header class="header clearfix">
+
+        <h3 class="text-muted">Home Automation</h3>
+      </header>
+
+      <main role="main">
+
+        <div class="jumbotron">
+          <h1 class="display-3">Raspberry Pi</h1>
+          <p class="lead">The following buttons is going to allow you controlling Raspberry Pi external sensors.</p>
+
+          <b>
+            <p id="test">Getting the sensor state... </p>
+          </b>
+          <center>
+            <button type="submit" class="btn btn-info" onclick="btn_on()">ON</button> <button type="submit" class="btn btn-danger" onclick="btn_off()">OFF</button>
+          </center>
+
+        </div>
+
+
+      </main>
+
+      <footer class="footer">
+        <p>&copy; Ziyad 2017</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      // (*) Should be changed with your own data
+      var config = {
+        apiKey: "*",
+        authDomain: "*",
+        databaseURL: "*",
+        projectId: "*",
+        storageBucket: "*",
+        messagingSenderId: "*"
+      };
+      firebase.initializeApp(config);
+
+      var database = firebase.database();
+
+      var test=document.getElementById('test');
+
+      var ref = firebase.database().ref().child('Switch').child('state');
+
+      ref.on("value", function(snapshot) {
+         test.innerText = snapshot.val();
+         if(snapshot.val() == "ON")
+          test.style.color = "Green";
+         else
+            test.style.color = "RED";
+
+
+      }, function (error) {
+         console.log("Error: " + error.code);
+      });
+
+      function btn_on(){
+        var hopperRef = firebase.database().ref().child("Switch");
+        hopperRef.update({
+          "state": "ON"
+        });
+
+      }
+      function btn_off(){
+        var hopperRef2 = firebase.database().ref().child("Switch");
+        hopperRef2.update({
+          "state": "OFF"
+        });
+
+      }
+
+    </script>
+
+  </body>
+</html>
